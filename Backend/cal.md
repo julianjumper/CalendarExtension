@@ -1,0 +1,47 @@
+### Server-Url: <br> http://130.61.95.144:5000/7188e-1844.ics
+## iCal - general layout
+```
+BEGIN:VCALENDAR
+VERSION:2.0
+CALSCALE:GREGORIAN
+BEGIN:VEVENT
+SUMMARY:Access-A-Ride Pickup
+DTSTART;TZID=America/New_York:20130802T103400
+DTEND;TZID=America/New_York:20130802T110400
+LOCATION:1000 Broadway Ave.\, Brooklyn
+DESCRIPTION: Access-A-Ride trip to 900 Jay St.\, Brooklyn
+STATUS:CONFIRMED
+SEQUENCE:3
+BEGIN:VALARM
+TRIGGER:-PT10M
+DESCRIPTION:Pickup Reminder
+ACTION:DISPLAY
+END:VALARM
+END:VEVENT
+END:VCALENDAR
+```
+# iCal-Keys / Values
+### <u>Allday-Events</u> <br>
+`DTSTART;VALUE=DATE:20230825`
+### <u>Alarm</u>
+```
+BEGIN:VALARM
+TRIGGER:-PT10M
+DESCRIPTION:Pickup Reminder
+ACTION:DISPLAY
+END:VALARM
+```
+---
+bisher:
+```
+DTSTART;TZID=Germany/Berlin:2023-08-26T02:0800
+```
+also 
+```
+2023-08-26T02:0800
+```
+zu
+ ```
+ 20230826T020800
+ ```
+

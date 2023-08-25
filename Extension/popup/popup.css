@@ -1,0 +1,63 @@
+html {
+  width: 400px;
+  height: 300px;
+}
+
+.container {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+
+.formComp {
+  text-align: center;
+}
+
+.container_row {
+  display: grid;
+}
+
+#title,
+#date,
+#time,
+#location {
+  grid-column: 1;
+  grid-row: 1;
+  visibility: hidden;
+}
+
+.next-submit {
+  display: grid;
+  height: 2em;
+}
+
+#nextBtn {
+  grid-column: 1;
+  grid-row: 1;
+  height: 2em;
+}
+
+#submitInput {
+  grid-column: 1;
+  grid-row: 1;
+  visibility: hidden;
+  height: 2em;
+}
+
+.buttons {
+  display: flex;
+  justify-content: center;
+  height: 2em;
+}
+
+label {
+  font-weight: bold;
+  font-size: 1.2em;
+}
+
+.subForm {
+  flex-direction: row;
+}
