@@ -1,21 +1,3 @@
-/*
-chrome.runtime.onInstalled.addListener(function () {
-  chrome.contextMenus.create({
-    id: "new_appointment",
-    title: "Neuen Termin '%s' erstellen",
-    contexts: ["selection"],
-  });
-});
-
-chrome.contextMenus.onClicked.addListener(function (info, tab) {
-  if (info.menuItemId === "new_appointment") {
-    var selection = info.selectionText;
-    // hier geht die Kalendar-Action los
-    console.log(selection); // TODO
-  }
-});
-
-*/
 const domain = "http://130.61.95.144:5000/";
 
 function generateUUID() {
@@ -68,36 +50,31 @@ function createCalendar(uuid) {
 }
 
 function createEvent(formData) {
-  const title = formData.eventTitle;
-  const date = formData.eventDate;
-  const time = formData.eventTime;
-  const endTime = formData.eventEndTime;
-  const allday = formData.allDay;
-  const location = formData.eventLocation;
-
-  const timeString = `${date}T${time}00`;
-  const timeEndString = `${date}T${endTime}00`;
-  const dateString = `DTSTART;TZID=Germany/Berlin:`
-  const endDateString = `DTEND;TZID=Germany/Berlin:`
-  const modifiedDate = dateString + timeString.replace(/[-:]/g, "") + "\n" + endDateString + timeEndString.replace(/[-:]/g, "");
-  const modifiedAlldayDate = date.replace(/[-:]/g, "");
-  const cal = `BEGIN:VEVENT
-SUMMARY:${title}
-${
-  allday
-    ? `DTSTART;VALUE=DATE:${modifiedAlldayDate}`
-    : modifiedDate
-}
-LOCATION:${location}
-SEQUENCE:3
-END:VEVENT`;
+  let title = formData.eventTitle;
+  if (!title || title == "") title = "Unnamed Event";
+  let date = formData.eventDate;
+  if (!date || date == "") date = new Date().toISOString().split('T')[0]
+  let time = formData.eventTime;
+  if (!time || time == "") time = "12:00"
+  let endTime = formData.eventEndTime;
+  if (!endTime || endTime == "") endTime = "13:00"
+  let allday = formData.allDay;
+  if (!allday) allday = false;
+  else allday = true;
+  let location = formData.eventLocation;
+  if (!location || location == "") location = "";
 
   chrome.storage.sync.get(["uuid"], (result) => {
     const uuid = result.uuid;
 
     const request = {
       userid: uuid,
-      event: cal,
+      title: title,
+      allday: allday,
+      time: time,
+      endTime: endTime,
+      date: date,
+      location: location,
     };
 
     apiCall(uuid, request);

@@ -45,9 +45,9 @@ nextBtn.addEventListener("click", () => {
       hoursNum = (hoursNum + 1) % 24;
 
       // Format the new time
-      let newTimeString = `${hoursNum
+      let newTimeString = `${hoursNum.toString().padStart(2, "0")}:${minutesNum
         .toString()
-        .padStart(2, "0")}:${minutesNum}`;
+        .padStart(2, "0")}`;
       const endTime = document.getElementById("eventEndTime");
       endTime.value = newTimeString;
     });
@@ -76,6 +76,7 @@ const submitForm = (e) => {
   e.preventDefault();
   const formData = new FormData(e.target);
   const formProps = Object.fromEntries(formData);
+  console.log("formProps", formProps);
   chrome.runtime.sendMessage({
     action: "passFormData",
     form: formProps,
