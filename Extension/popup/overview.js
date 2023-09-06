@@ -1,6 +1,27 @@
 const eventList = document.getElementById("eventList");
 
 const domain = "http://130.61.95.144:5000/";
+let uuid;
+
+// api call to get events as json
+chrome.storage.sync.get(["uuid"], (result) => {
+  uuid = result.uuid;
+  fetch(domain + "getEvents", {
+    method: "GET",
+    headers: {
+      Authorization: uuid,
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => response.json()) //createScrollList(response.json().events)})
+    //.then((data) => {console.log("JSON:",JSON.stringify(data))})
+    .then((data) => {
+      createScrollList(data.events);
+    })
+    .catch((error) => {
+      console.error("Fehler beim Senden der Daten:", error);
+    });
+});
 
 const createScrollList = (eventsArray) => {
   for (i = 0; i < eventsArray.length; i++) {
@@ -51,7 +72,7 @@ const createScrollList = (eventsArray) => {
 
     let eventThinTime = document.createElement("p");
     eventThinTime.className = "eventThin";
-    eventThinTime.innerText = event.time;
+    eventThinTime.innerText = event.allday ? "allday" : event.time;
 
     eventTimeContainer.appendChild(eventBoldTime);
     eventTimeContainer.appendChild(eventThinTime);
@@ -74,7 +95,7 @@ const createScrollList = (eventsArray) => {
     eventLeftSide.appendChild(eventTitleContainer);
     eventLeftSide.appendChild(eventDateContainer);
     eventLeftSide.appendChild(eventTimeContainer);
-    eventLeftSide.appendChild(eventLocationContainer);
+    if (event.location != "") eventLeftSide.appendChild(eventLocationContainer);
 
     // Add icons
     let eventRightSide = document.createElement("div");
@@ -86,9 +107,10 @@ const createScrollList = (eventsArray) => {
 
     let eventDeleteIcon = document.createElement("span");
     eventDeleteIcon.className = "material-symbols-outlined";
+    eventDeleteIcon.classList.add("delete");
     eventDeleteIcon.innerText = "delete";
 
-    eventRightSide.appendChild(eventEditIcon);
+    // eventRightSide.appendChild(eventEditIcon);
     eventRightSide.appendChild(eventDeleteIcon);
 
     eventContainer.appendChild(eventLeftSide);
@@ -96,26 +118,42 @@ const createScrollList = (eventsArray) => {
 
     eventList.appendChild(eventContainer);
   }
+
+  addEventListeners();
 };
 
-// api call to get events as josn
-chrome.storage.sync.get(["uuid"], (result) => {
-  const uuid = result.uuid;
-  fetch(domain + "getEvents", {
-    method: "GET",
+const addEventListeners = () => {
+  let elements = document.querySelectorAll(
+    "span.material-symbols-outlined.delete"
+  );
+  elements.forEach(function (item, idx) {
+    function eventListener() {
+      deleteEvent(idx, item);
+    }
+    item.addEventListener("click", eventListener, true);
+  });
+};
+
+const deleteEvent = (eventIndex, deleteIcon) => {
+  fetch(domain + "deleteEvent", {
+    method: "DELETE",
     headers: {
       Authorization: uuid,
       "Content-Type": "application/json",
     },
+    body: JSON.stringify({ eventIndex: eventIndex }),
   })
-    .then((response) => {
-      console.log(response.json());
-    }) //createScrollList(response.json().events)})
-    .then((data) => {console.log("JSON:",JSON.stringify(data))})
+    .then((response) => response.json())
+    .then((data) => {
+      // deleteIcon.remove();
+      // const parentDiv = deleteIcon.parentElement.parentElement;
+      // parentDiv.remove();
+      window.location.reload(); // not particularly beautiful, but it works
+    })
     .catch((error) => {
       console.error("Fehler beim Senden der Daten:", error);
     });
-});
+};
 
 /*
 

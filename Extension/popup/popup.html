@@ -18,6 +18,7 @@
       <form id="eventForm">
         <div class="container_row">
           <div class="formComp" id="title">
+            <h2>Create new event</h2>
             <label id="eventTitleL" for="eventTitle">Event Title</label> <br />
             <input
               type="text"
@@ -39,29 +40,34 @@
             <div class="subForm">
               <div>
                 <label id="eventTimeL" for="eventTime">Event Time</label> <br />
-                <input
-                  type="time"
-                  id="eventTime"
-                  name="eventTime"
-                  placeholder="Event Time"
-                />
+              </div>
+              <div id="eventTimeContainer">
+                <div>
+                  <p>from:</p>
+                  <input
+                    type="time"
+                    id="eventTime"
+                    name="eventTime"
+                    placeholder="Event Time"
+                  />
+                </div>
+                <div>
+                  <p>to:</p>
+                  <input
+                    type="time"
+                    id="eventEndTime"
+                    name="eventEndTime"
+                    placeholder="Event Ending Time"
+                  />
+                </div>
+              </div>
+              <div id="alldayContainer">
+                <p>or allday:</p>
                 <input
                   type="checkbox"
                   id="allDay"
                   name="allDay"
                   value="allDay"
-                />
-              </div>
-              <div>
-                <label id="eventEndTimeL" for="eventEndTime"
-                  >Event Ending Time</label
-                >
-                <br />
-                <input
-                  type="time"
-                  id="eventEndTime"
-                  name="eventEndTime"
-                  placeholder="Event Ending Time"
                 />
               </div>
             </div>
@@ -90,7 +96,16 @@
           </div>
         </div>
       </form>
-      <div id="uuid">uuid</div>
+
+      <div class="urlContainer">
+        <div>Subscribe to this iCalendar:</div>
+        <div class="url">
+          <a id="uuid" href="">url</a>
+          <span id="copy" class="material-symbols-outlined">
+            content_copy
+          </span>
+        </div>
+      </div>
     </div>
     <script src="popup.js"></script>
   </body>

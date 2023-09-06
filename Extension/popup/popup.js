@@ -11,8 +11,12 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     eventTitle.value = selectedText;
     // document.getElementById("selectedText").textContent = selectedText;
   } else if (message.action === "getUUID") {
+    // display uuid ånd url in popup
     const uuid = message.uuid;
-    document.getElementById("uuid").textContent = uuid;
+    const uuidElem = document.getElementById("uuid");
+    const url = `http://130.61.95.144:5000/${uuid}.ics`;
+    uuidElem.textContent = url;
+    uuidElem.href = url;
   }
 });
 
@@ -77,12 +81,30 @@ const submitForm = (e) => {
   const formData = new FormData(e.target);
   const formProps = Object.fromEntries(formData);
   console.log("formProps", formProps);
+
+  (async () => {
+    const response = await chrome.runtime.sendMessage({
+      action: "passFormData",
+      form: formProps,
+    });
+    if (response.message == "success") {
+      window.close();
+    }
+  })();
+  /*
   chrome.runtime.sendMessage({
     action: "passFormData",
     form: formProps,
   });
-  window.close();
+  window.close();*/
 };
 
 const loginForm = document.getElementById("eventForm");
 loginForm.addEventListener("submit", submitForm);
+
+const copyBtn = document.getElementById("copy");
+copyBtn.addEventListener("click", () => {
+  const uuidElem = document.getElementById("uuid");
+  const uuid = uuidElem.textContent;
+  navigator.clipboard.writeText(uuid);
+});

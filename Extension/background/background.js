@@ -50,6 +50,7 @@ function createCalendar(uuid) {
 }
 
 function createEvent(formData) {
+  // format form data if empty
   let title = formData.eventTitle;
   if (!title || title == "") title = "Unnamed Event";
   let date = formData.eventDate;
@@ -76,6 +77,8 @@ function createEvent(formData) {
       date: date,
       location: location,
     };
+
+    console.log("request:", request);
 
     apiCall(uuid, request);
   });
@@ -150,6 +153,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   } else if (message.action === "passFormData") {
     const formData = message.form;
     createEvent(formData);
+    sendResponse({ message: "success" });
   }
 });
 

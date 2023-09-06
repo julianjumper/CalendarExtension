@@ -28,6 +28,7 @@ app.use(
 
 app.use(express.static(path.join(__dirname, "./calendars")));
 
+// add event to ICS file
 const addEventICS = async (icsPath, body) => {
   const timeString = `${body.date}T${body.time}00`;
   const timeEndString = `${body.date}T${body.endTime}00`;
@@ -54,7 +55,6 @@ END:VEVENT`;
     const insertionIndex = Math.max(lineNumber, 0);
     lines.splice(insertionIndex, 0, changes);
     const updatedText = lines.join("\n");
-    console.log("updatedText:", updatedText);
     await fsp.writeFile(icsPath, updatedText, "utf8");
     return lineNumber;
   } catch (err) {
@@ -63,25 +63,36 @@ END:VEVENT`;
   }
 };
 
+// add event to JSON file
 const addEventJSON = (jsonPath, body, line, res) => {
+  // remember where event starts and ends in ICS file (important for deleting)
+  const endLineNumber = body.allday ? line + 5 : line + 6;
   const addToJson = {
     title: body.title,
     location: body.location,
     date: body.date,
     allday: body.allday,
     time: body.time,
+    endTime: body.endTime,
     lineNumber: line,
+    endLineNumber: endLineNumber,
   };
 
+  // read json file, add event to array, sort array, write back to file
   fs.readFile(jsonPath, (err, data) => {
     if (err) {
       console.log(err);
       return;
     }
+
+    // parse json file and add new event
     let json = JSON.parse(data);
-    console.log("Json vorher:", json);
     json.events.push(addToJson);
-    console.log("Json nachher:", json);
+
+    // sort event array by date and time
+    json.events.sort((a, b) => {
+      return new Date(`${a.date}T${a.time}`) - new Date(`${b.date}T${b.time}`);
+    });
 
     fs.writeFile(jsonPath, JSON.stringify(json), (err) => {
       if (err) {
@@ -104,6 +115,8 @@ app.post("/addEvent", (req, res) => {
   // add to JSON and to ICS
   const icsPath = `./calendars/${auth}.ics`;
   const jsonPath = `./calendars/${auth}.json`;
+
+  console.log("about to add an event");
 
   // Pormise handling for async function.
   // Add event to ICS and then to JSON (because we need the line number)
@@ -144,6 +157,7 @@ app.get("/getEvents", (req, res) => {
   });
 });
 
+// create file with, responds with error 500 if necessary
 const createFile = (path, init, res) => {
   fs.writeFile(path, init, "utf8", (err) => {
     if (err) {
@@ -155,20 +169,22 @@ const createFile = (path, init, res) => {
   });
 };
 
+// POST-Request for creating new calendar
 app.post("/createCalendar", (req, res) => {
-  // create file with name of user
+  // create file with name of user given in authorization header
   const auth = req.headers.authorization;
   if (!auth) {
     res.status(401).json({ error: "Unauthorized" });
     return;
   }
+
+  // path to ics and json file
   const icsPath = `./calendars/${auth}.ics`;
   const jsonPath = `./calendars/${auth}.json`;
 
-  const icsInit = `BEGIN:VCALENDAR
-CALSCALE:GREGORIAN
-END:VCALENDAR`;
-
+  // initialisation of ics file
+  const icsInit = "BEGIN:VCALENDAR\nCALSCALE:GREGORIAN\nEND:VCALENDAR";
+  // initialisation of json file (empty array of events)
   const jsonInit = '{"events": []}';
 
   createFile(icsPath, icsInit, res);
@@ -180,4 +196,112 @@ END:VCALENDAR`;
 // Start server
 app.listen(port, () => {
   console.log(`Server läuft auf Port ${port}`);
+});
+
+deleteEventIcs = (icsPath, startLine, endLine) => {
+  fs.readFile(icsPath, "utf8", (err, data) => {
+    if (err) {
+      console.log("error position 1");
+      return -1;
+    }
+
+    const lines = data.split("\n");
+
+    // is startLine valid?
+    if (startLine < 1 || startLine > lines.length) {
+      console.log("error position 2");
+      return -1;
+    }
+    /*
+    // Remove the lines within the range
+    lines.splice(startLine, endLine - startLine + 1);
+    */
+
+    // Replace the lines within the range with blank lines
+    for (let i = startLine; i <= endLine; i++) {
+      lines[i] = "";
+    }
+
+    // Create the modified content
+    const modifiedContent = lines.join("\n");
+
+    // Write the modified content back to the file
+    fs.writeFile(icsPath, modifiedContent, "utf8", (err) => {
+      if (err) {
+        console.error("Error writing to the file:", err);
+        return -1;
+      }
+      console.log(`Deleted lines from ${startLine} to ${endLine}`);
+      return endLine - startLine;
+    });
+  });
+};
+
+// delete event from ICS file
+app.delete("/deleteEvent", (req, res) => {
+  const auth = req.headers.authorization;
+  if (!auth) {
+    res.status(401).json({ message: "Unauthorized" });
+    return;
+  }
+
+  // path to ics and json file
+  const icsPath = `./calendars/${auth}.ics`;
+  const jsonPath = `./calendars/${auth}.json`;
+
+  const eventIndex = req.body.eventIndex;
+
+  // read json file to get start/end line from ics file, then delete event from ics file.
+  fs.readFile(jsonPath, (err, data) => {
+    if (err) {
+      res.status(204).json({
+        message: "Error while delete event.",
+      });
+      return;
+    }
+
+    // parse json file to get line numbers
+    let json = JSON.parse(data);
+    const event = json.events[eventIndex];
+
+    if (!event) {
+      res.status(204).json({
+        message: "Error while delete event.",
+      });
+      return;
+    }
+    const startLine = event.lineNumber;
+    const endLine = event.endLineNumber;
+
+    const deleted = deleteEventIcs(icsPath, startLine, endLine);
+    if (deleted == -1) {
+      res.status(204).json({
+        message: "Error while delete event.",
+      });
+      return;
+    }
+    /*
+    if (deleted > -1) {
+      // update line numbers in json file
+      /*for (let i = eventIndex + 1; i < json.events.length; i++) {
+        if (json.events[i].lineNumber > startLine) {
+          console.log("delted:", deleted);
+          json.events[i].lineNumber -= deleted;
+          json.events[i].endLineNumber -= deleted;
+        }
+        
+      }*/
+
+    // delete event from json file
+    json.events.splice(eventIndex, 1);
+
+    fs.writeFile(jsonPath, JSON.stringify(json), (err) => {
+      if (err) {
+        res.status(204).json({ message: "Error while delete event." });
+        return;
+      }
+    });
+
+    res.status(200).json({ message: "Successfully deleted event." });
+  });
 });
