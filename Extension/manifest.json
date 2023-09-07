@@ -4,7 +4,7 @@
     "version": "1.0.0",
     "description": "Adding events to your Apple/Google calendar easily from any website.",
     "author": "jmjumper",
-    "permissions": ["identity", "storage", "activeTab", "scripting"],
+    "permissions": ["storage", "activeTab", "scripting"],
     "action": {
         "default_popup": "popup/popup.html"
     },
