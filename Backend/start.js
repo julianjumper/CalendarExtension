@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 const fs = require("fs");
 const fsp = require("fs").promises;
 const cors = require("cors");
+const https = require("https");
 
 const app = express();
 const port = 5000;
@@ -193,11 +194,6 @@ app.post("/createCalendar", (req, res) => {
   res.json({ message: "Successfully created files." });
 });
 
-// Start server
-app.listen(port, () => {
-  console.log(`Server läuft auf Port ${port}`);
-});
-
 deleteEventIcs = (icsPath, startLine, endLine) => {
   fs.readFile(icsPath, "utf8", (err, data) => {
     if (err) {
@@ -304,4 +300,16 @@ app.delete("/deleteEvent", (req, res) => {
 
     res.status(200).json({ message: "Successfully deleted event." });
   });
+});
+
+const httpsOptions = {
+  key: fs.readFileSync("/etc/letsencrypt/live/calendarapi.jmjumper.de/privkey.pem"),
+  cert: fs.readFileSync("/etc/letsencrypt/live/calendarapi.jmjumper.de/fullchain.pem"),
+};
+
+const httpsServer = https.createServer(httpsOptions, app);
+
+// Start server
+httpsServer.listen(port, () => {
+  console.log(`Server läuft auf Port ${port}`);
 });

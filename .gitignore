@@ -3,4 +3,5 @@
 /Backend/calendars/*
 /Backend/node_modules
 /Backend/.DS_Store
+/Backend/cert/*
 /.DS_Store

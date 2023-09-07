@@ -14,7 +14,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     // display uuid ånd url in popup
     const uuid = message.uuid;
     const uuidElem = document.getElementById("uuid");
-    const url = `http://130.61.95.144:5000/${uuid}.ics`;
+    const url = `https://calendarapi.jmjumper.de:5000/${uuid}.ics`;
     uuidElem.textContent = url;
     uuidElem.href = url;
   }

@@ -1,6 +1,6 @@
 const eventList = document.getElementById("eventList");
 
-const domain = "http://130.61.95.144:5000/";
+const domain = "https://calendarapi.jmjumper.de:5000/";
 let uuid;
 
 // api call to get events as json

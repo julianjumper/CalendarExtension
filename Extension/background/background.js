@@ -1,4 +1,4 @@
-const domain = "http://130.61.95.144:5000/";
+const domain = "https://calendarapi.jmjumper.de:5000/";
 
 function generateUUID() {
   var d = new Date().getTime();
@@ -106,29 +106,6 @@ chrome.runtime.onInstalled.addListener(async function (details) {
         files: cs.js,
       });
     }
-  }
-});
-
-chrome.contextMenus.onClicked.addListener(function (info, tab) {
-  if (info.menuItemId === "new_appointment") {
-    const selectedText = info.selectionText;
-    const changes = {
-      userid: "user1", // das muesste eine UserID sein, sonst zu unsicher
-      event: `BEGIN:VEVENT
-SUMMARY:${selectedText}
-DTSTART;TZID=Germany/Berlin:20230820T103400
-DTEND;TZID=Germany/Berlin:20230820T113400
-LOCATION:Goethestr. 13\, Berlin
-DESCRIPTION: Ein Test\, in Berlin
-STATUS:CONFIRMED
-SEQUENCE:3
-END:VEVENT`,
-    };
-
-    chrome.storage.sync.get(["uuid"], (result) => {
-      const uuid = result.uuid;
-      apiCall(uuid, changes);
-    });
   }
 });
 
