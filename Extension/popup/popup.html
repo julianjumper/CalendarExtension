@@ -14,88 +14,93 @@
         ><span class="material-symbols-outlined" id="overview"> menu </span></a
       >
     </div>
-    <div class="container">
-      <form id="eventForm">
-        <div class="container_row">
-          <div class="formComp" id="title">
-            <h2>Create new event</h2>
-            <label id="eventTitleL" for="eventTitle">Event Title</label> <br />
-            <input
-              type="text"
-              id="eventTitle"
-              name="eventTitle"
-              placeholder="Event Title"
-            />
-          </div>
-          <div class="formComp" id="date">
-            <label id="eventDateL" for="eventDate">Event Date</label> <br />
-            <input
-              type="date"
-              id="eventDate"
-              name="eventDate"
-              placeholder="Event Date"
-            />
-          </div>
-          <div class="formComp" id="time">
-            <div class="subForm">
-              <div>
-                <label id="eventTimeL" for="eventTime">Event Time</label> <br />
-              </div>
-              <div id="eventTimeContainer">
+    <div class="outer">
+      <div class="container">
+        <form id="eventForm">
+          <div class="container_row">
+            <div class="formComp" id="title">
+              <h2>Create new event</h2>
+              <label id="eventTitleL" for="eventTitle">Event Title</label>
+              <br />
+              <input
+                type="text"
+                id="eventTitle"
+                name="eventTitle"
+                placeholder="Event Title"
+              />
+            </div>
+            <div class="formComp" id="date">
+              <label id="eventDateL" for="eventDate">Event Date</label> <br />
+              <input
+                type="date"
+                id="eventDate"
+                name="eventDate"
+                placeholder="Event Date"
+              />
+            </div>
+            <div class="formComp" id="time">
+              <div class="subForm">
                 <div>
-                  <p>from:</p>
+                  <label id="eventTimeL" for="eventTime">Event Time</label>
+                  <br />
+                </div>
+                <div id="eventTimeContainer">
+                  <div>
+                    <p>from:</p>
+                    <input
+                      type="time"
+                      id="eventTime"
+                      name="eventTime"
+                      placeholder="Event Time"
+                    />
+                  </div>
+                  <div>
+                    <p>to:</p>
+                    <input
+                      type="time"
+                      id="eventEndTime"
+                      name="eventEndTime"
+                      placeholder="Event Ending Time"
+                    />
+                  </div>
+                </div>
+                <div id="alldayContainer">
+                  <p>or allday:</p>
                   <input
-                    type="time"
-                    id="eventTime"
-                    name="eventTime"
-                    placeholder="Event Time"
+                    type="checkbox"
+                    id="allDay"
+                    name="allDay"
+                    value="allDay"
                   />
                 </div>
-                <div>
-                  <p>to:</p>
-                  <input
-                    type="time"
-                    id="eventEndTime"
-                    name="eventEndTime"
-                    placeholder="Event Ending Time"
-                  />
-                </div>
               </div>
-              <div id="alldayContainer">
-                <p>or allday:</p>
-                <input
-                  type="checkbox"
-                  id="allDay"
-                  name="allDay"
-                  value="allDay"
-                />
-              </div>
+            </div>
+
+            <div class="formComp" id="location">
+              <label id="eventLocationL" for="eventLocation"
+                >Event Location</label
+              >
+              <br />
+              <input
+                type="text"
+                id="eventLocation"
+                name="eventLocation"
+                placeholder="Event Location"
+              />
             </div>
           </div>
 
-          <div class="formComp" id="location">
-            <label id="eventLocationL" for="eventLocation"
-              >Event Location</label
-            >
-            <br />
-            <input
-              type="text"
-              id="eventLocation"
-              name="eventLocation"
-              placeholder="Event Location"
-            />
+          <div id="selectedText"></div>
+          <div class="buttons">
+            <button type="button" id="prevBtn">Prev</button>
+            <div class="next-submit">
+              <button type="button" id="nextBtn">Next</button>
+              <input id="submitInput" type="submit" value="Create Event" />
+              <br />
+            </div>
           </div>
-        </div>
-
-        <div id="selectedText"></div>
-        <div class="buttons">
-          <button type="button" id="prevBtn">Prev</button>
-          <div class="next-submit">
-            <button type="button" id="nextBtn">Next</button>
-            <input id="submitInput" type="submit" value="Create Event" /> <br />
-          </div>
-        </div>
-      </form>
+        </form>
+      </div>
 
       <div class="urlContainer">
         <div>Subscribe to this iCalendar:</div>

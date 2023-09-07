@@ -80,7 +80,7 @@ label {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  height: 100px; /* Set a height for the container if needed */
+  height: 100px;
 }
 
 .header h1,
@@ -94,10 +94,8 @@ label {
   justify-content: center;
   align-items: center;
   height: 30px;
-}
-
-.url {
-  width: 260px;
+  font-size: 0.8em;
+  margin-top: 40%;
 }
 
 #copy {
