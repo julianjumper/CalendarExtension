@@ -3,7 +3,6 @@ const domain = "https://calendarapi.jmjumper.de:5000/";
 function generateUUID() {
   var d = new Date().getTime();
 
-  //var uuid = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
   var uuid = "xxxyx-xyxx".replace(/[xy]/g, function (c) {
     var r = (d + Math.random() * 16) % 16 | 0;
     d = Math.floor(d / 16);
@@ -52,18 +51,18 @@ function createCalendar(uuid) {
 function createEvent(formData) {
   // format form data if empty
   let title = formData.eventTitle;
-  if (!title || title == "") title = "Unnamed Event";
+  if (!title || title === "") title = "Unnamed Event";
   let date = formData.eventDate;
-  if (!date || date == "") date = new Date().toISOString().split('T')[0]
+  if (!date || date === "") date = new Date().toISOString().split('T')[0]
   let time = formData.eventTime;
-  if (!time || time == "") time = "12:00"
+  if (!time || time === "") time = "12:00"
   let endTime = formData.eventEndTime;
-  if (!endTime || endTime == "") endTime = "13:00"
+  if (!endTime || endTime === "") endTime = "13:00"
   let allday = formData.allDay;
   if (!allday) allday = false;
   else allday = true;
   let location = formData.eventLocation;
-  if (!location || location == "") location = "";
+  if (!location || location === "") location = "";
 
   chrome.storage.sync.get(["uuid"], (result) => {
     const uuid = result.uuid;
@@ -78,8 +77,6 @@ function createEvent(formData) {
       location: location,
     };
 
-    console.log("request:", request);
-
     apiCall(uuid, request);
   });
 }
@@ -92,12 +89,6 @@ chrome.runtime.onInstalled.addListener(async function (details) {
     // call api to register new calendar
     createCalendar(newUuid);
   }
-  // Context Menu item
-  chrome.contextMenus.create({
-    id: "new_appointment",
-    title: "Neuen Termin '%s' erstellen",
-    contexts: ["selection"],
-  });
 
   for (const cs of chrome.runtime.getManifest().content_scripts) {
     for (const tab of await chrome.tabs.query({ url: cs.matches })) {
@@ -111,7 +102,6 @@ chrome.runtime.onInstalled.addListener(async function (details) {
 
 // send selected test received from content script to popup
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  console.log("BIN IM LISTENER");
   if (message.action === "getSelectedText") {
     const selectedText = message.data;
     // wait for popup to open
@@ -122,9 +112,6 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
           action: "passSelectedText",
           selected: selectedText,
         });
-        /*port.onDisconnect.addListener(function () {
-          console.log("popup has been closed");
-        });*/
       }
     });
   } else if (message.action === "passFormData") {
