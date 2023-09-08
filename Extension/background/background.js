@@ -6,7 +6,7 @@ function generateUUID() {
   var uuid = "xxxyx-xyxx".replace(/[xy]/g, function (c) {
     var r = (d + Math.random() * 16) % 16 | 0;
     d = Math.floor(d / 16);
-    return (c == "x" ? r : (r & 0x3) | 0x8).toString(16);
+    return (c === "x" ? r : (r & 0x3) | 0x8).toString(16);
   });
 
   return uuid;
@@ -59,8 +59,6 @@ function createEvent(formData) {
   let endTime = formData.eventEndTime;
   if (!endTime || endTime === "") endTime = "13:00"
   let allday = formData.allDay;
-  if (!allday) allday = false;
-  else allday = true;
   let location = formData.eventLocation;
   if (!location || location === "") location = "";
 
