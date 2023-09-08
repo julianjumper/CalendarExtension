@@ -13,8 +13,7 @@ chrome.storage.sync.get(["uuid"], (result) => {
       "Content-Type": "application/json",
     },
   })
-    .then((response) => response.json()) //createScrollList(response.json().events)})
-    //.then((data) => {console.log("JSON:",JSON.stringify(data))})
+    .then((response) => response.json())
     .then((data) => {
       createScrollList(data.events);
     })
@@ -72,7 +71,7 @@ const createScrollList = (eventsArray) => {
 
     let eventThinTime = document.createElement("p");
     eventThinTime.className = "eventThin";
-    eventThinTime.innerText = event.allday ? "allday" : event.time;
+    eventThinTime.innerText = event.allday ? "allday" : event.time + " - " + event.endTime;
 
     eventTimeContainer.appendChild(eventBoldTime);
     eventTimeContainer.appendChild(eventThinTime);
@@ -95,7 +94,7 @@ const createScrollList = (eventsArray) => {
     eventLeftSide.appendChild(eventTitleContainer);
     eventLeftSide.appendChild(eventDateContainer);
     eventLeftSide.appendChild(eventTimeContainer);
-    if (event.location != "") eventLeftSide.appendChild(eventLocationContainer);
+    if (event.location !== "") eventLeftSide.appendChild(eventLocationContainer);
 
     // Add icons
     let eventRightSide = document.createElement("div");
@@ -128,13 +127,13 @@ const addEventListeners = () => {
   );
   elements.forEach(function (item, idx) {
     function eventListener() {
-      deleteEvent(idx, item);
+      deleteEvent(idx);
     }
     item.addEventListener("click", eventListener, true);
   });
 };
 
-const deleteEvent = (eventIndex, deleteIcon) => {
+const deleteEvent = (eventIndex) => {
   fetch(domain + "deleteEvent", {
     method: "DELETE",
     headers: {
@@ -144,46 +143,10 @@ const deleteEvent = (eventIndex, deleteIcon) => {
     body: JSON.stringify({ eventIndex: eventIndex }),
   })
     .then((response) => response.json())
-    .then((data) => {
-      // deleteIcon.remove();
-      // const parentDiv = deleteIcon.parentElement.parentElement;
-      // parentDiv.remove();
+    .then(() => {
       window.location.reload(); // not particularly beautiful, but it works
     })
     .catch((error) => {
       console.error("Fehler beim Senden der Daten:", error);
     });
 };
-
-/*
-
-    <div class="eventContainer">
-      <div class="eventLeftSide">
-        <div class="eventTextContainer">
-          <p class="eventBold">Title:</p>
-          <p class="eventThin">Title</p>
-        </div>
-
-        <div class="eventTextContainer">
-          <p class="eventBold">Date:</p>
-          <p class="eventThin">Date</p>
-        </div>
-
-        <div class="eventTextContainer">
-          <p class="eventBold">Time:</p>
-          <p class="eventThin">Time</p>
-        </div>
-
-        <div class="eventTextContainer">
-          <div class="eventBold">
-            <p>Location:</p>
-          </div>
-          <div class="eventThin"><p>Location</p></div>
-        </div>
-      </div>
-      <div class="eventRightSide">
-        <span class="material-symbols-outlined"> edit </span>
-        <span class="material-symbols-outlined"> delete </span>
-      </div>
-    </div>
-*/

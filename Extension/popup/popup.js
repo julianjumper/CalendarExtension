@@ -91,12 +91,6 @@ const submitForm = (e) => {
       window.close();
     }
   })();
-  /*
-  chrome.runtime.sendMessage({
-    action: "passFormData",
-    form: formProps,
-  });
-  window.close();*/
 };
 
 const loginForm = document.getElementById("eventForm");
