@@ -36,7 +36,7 @@ nextBtn.addEventListener("click", () => {
   currentPage++;
   document.getElementById(pages[currentPage - 1]).style.visibility = "hidden";
   document.getElementById(pages[currentPage]).style.visibility = "visible";
-  if (currentPage == 2) {
+  if (currentPage === 2) {
     const startTime = document.getElementById("eventTime");
     startTime.addEventListener("change", () => {
       let [hours, minutes] = startTime.value.split(":");
@@ -87,7 +87,7 @@ const submitForm = (e) => {
       action: "passFormData",
       form: formProps,
     });
-    if (response.message == "success") {
+    if (response.message === "success") {
       window.close();
     }
   })();
