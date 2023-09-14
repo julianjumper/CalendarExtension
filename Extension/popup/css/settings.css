@@ -1,0 +1,85 @@
+html {
+  width: 400px;
+  height: 300px;
+}
+
+.container {
+  margin: 0;
+  position: absolute;
+  top: 60%;
+  left: 50%;
+  width: 80%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  height: 100px;
+}
+
+.header h1,
+.header span {
+  margin: 0;
+}
+
+label {
+  font-weight: bold;
+  font-size: 1.2em;
+}
+
+#uuidInput {
+  height: 1.3em;
+  margin-bottom: 0.4em;
+  margin-right: 0.2em;
+  size: 0.7em;
+}
+
+button {
+  cursor: pointer;
+  border-radius: 0.2em;
+  border-width: 1px;
+  background-color: rgb(106, 192, 253);
+}
+
+.inputContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 30px;
+  font-size: 0.8em;
+}
+
+.info {
+  margin-top: 3em;
+  hyphens: auto;
+  text-align: justify;
+  background-color: rgb(231, 231, 231);
+  border-radius: 8px;
+  border-color: rgb(79, 79, 79);
+  border-style: solid;
+  border-width: 0.1em;
+  padding-left: 1em;
+  padding-right: 1em;
+  padding-top: 0em;
+  padding-bottom: 0em;
+}
+
+.infoID {
+  font-weight: bold;
+  text-align: center;
+}
+
+.inputSub {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+#copy {
+  font-size: 2em;
+  cursor: pointer;
+}

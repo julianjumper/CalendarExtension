@@ -276,17 +276,6 @@ app.delete("/deleteEvent", (req, res) => {
       });
       return;
     }
-    /*
-    if (deleted > -1) {
-      // update line numbers in json file
-      /*for (let i = eventIndex + 1; i < json.events.length; i++) {
-        if (json.events[i].lineNumber > startLine) {
-          console.log("delted:", deleted);
-          json.events[i].lineNumber -= deleted;
-          json.events[i].endLineNumber -= deleted;
-        }
-        
-      }*/
 
     // delete event from json file
     json.events.splice(eventIndex, 1);
@@ -302,9 +291,34 @@ app.delete("/deleteEvent", (req, res) => {
   });
 });
 
+// check if calendar exists
+app.get("/calendarExists", (req, res) => {
+  console.log("calendarExists");
+  const auth = req.headers.authorization;
+  if (!auth) {
+    res.status(401).json({ error: "Unauthorized" });
+    return;
+  }
+
+  const icsPath = `./calendars/${auth}.ics`;
+  const jsonPath = `./calendars/${auth}.json`;
+
+  fs.access(icsPath, fs.F_OK, (err) => {
+    if (err) {
+      res.json({ exists: false });
+      return;
+    }
+    res.json({ exists: true });
+  });
+});
+
 const httpsOptions = {
-  key: fs.readFileSync("/etc/letsencrypt/live/calendarapi.jmjumper.de/privkey.pem"),
-  cert: fs.readFileSync("/etc/letsencrypt/live/calendarapi.jmjumper.de/fullchain.pem"),
+  key: fs.readFileSync(
+    "/etc/letsencrypt/live/calendarapi.jmjumper.de/privkey.pem"
+  ),
+  cert: fs.readFileSync(
+    "/etc/letsencrypt/live/calendarapi.jmjumper.de/fullchain.pem"
+  ),
 };
 
 const httpsServer = https.createServer(httpsOptions, app);

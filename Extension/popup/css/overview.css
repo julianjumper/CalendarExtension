@@ -1,0 +1,53 @@
+html {
+  width: 400px;
+  height: 300px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  height: 20px;
+  margin-bottom: 1em;
+}
+
+.header h1,
+.header span {
+  margin: 0;
+}
+
+.eventContainer {
+  flex-wrap: wrap;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+  padding: 0.3em;
+  margin-bottom: 0.3em;
+
+  background-color: rgb(220, 220, 220);
+  border: 0px solid black;
+  border-radius: 8px;
+}
+
+.eventTextContainer {
+  display: flex;
+  align-items: center; /* Vertically center the content */
+  height: 1.2em;
+  margin-bottom: 0em; /* Add some spacing between event containers */
+}
+
+.eventBold {
+  font-weight: bold;
+  font-size: 1em;
+  margin-right: 0.2em;
+}
+
+.eventRightSide {
+  display: flex;
+  align-items: center; 
+}
+
+span {
+    cursor: pointer;
+}

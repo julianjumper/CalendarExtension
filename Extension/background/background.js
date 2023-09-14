@@ -51,11 +51,11 @@ function createEvent(formData) {
   let title = formData.eventTitle;
   if (!title || title === "") title = "Unnamed Event";
   let date = formData.eventDate;
-  if (!date || date === "") date = new Date().toISOString().split('T')[0]
+  if (!date || date === "") date = new Date().toISOString().split("T")[0];
   let time = formData.eventTime;
-  if (!time || time === "") time = "12:00"
+  if (!time || time === "") time = "12:00";
   let endTime = formData.eventEndTime;
-  if (!endTime || endTime === "") endTime = "13:00"
+  if (!endTime || endTime === "") endTime = "13:00";
   let allday = formData.allDay;
   let location = formData.eventLocation;
   if (!location || location === "") location = "";
@@ -98,10 +98,12 @@ chrome.runtime.onInstalled.addListener(async function (details) {
 
 // send selected test received from content script to popup
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  // sends selected text to popup as soon as it opens
   if (message.action === "getSelectedText") {
     const selectedText = message.data;
     // wait for popup to open
     chrome.runtime.onConnect.addListener((port) => {
+      // popup is now open
       if (port.name === "popup") {
         // send selected text to popup
         chrome.runtime.sendMessage({
@@ -110,7 +112,9 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         });
       }
     });
-  } else if (message.action === "passFormData") {
+  }
+  // creates event for popup.js
+  else if (message.action === "passFormData") {
     const formData = message.form;
     createEvent(formData);
     sendResponse({ message: "success" });
