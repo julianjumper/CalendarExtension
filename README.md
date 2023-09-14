@@ -1,4 +1,4 @@
-# CalendarExtension 
+# Calendar Extension
 
 Add events to your calendar app while browsing.  <br>
 Just select the text to be used as the event title, open the extension and you are almost done. 
@@ -25,6 +25,11 @@ Open Calendar-app -> click on "Calendars" at the bottom -> "Add Calendar" -> "Ad
 At "Other calendars", click on the "+" -> "Subscribe to calendar" -> "From URL" -> insert <b>your</b> URL  <br>
 ### Others:
 Other providers will not differ significantly from Apple/Google.
+
+---
+## Synchronisation 
+You can synchronise the extension between different browsers by using the same user-id in the settings. This is self-explanatory. <br>
+This may also be used to restore calendars.
 
 ---
 It may not be pretty but functional. 
