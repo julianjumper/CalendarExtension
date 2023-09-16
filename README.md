@@ -17,7 +17,7 @@ Just select the text to be used as the event title, open the extension and you a
 </table>
 
 --- 
-## Implementation to calendar app
+## Implementation to your calendar app
 The url as seen in the left image can be subscribed to in most calendar-providers such as Apple Calendar or Google Calendar etc. <br>
 ### In <b>Apple Calendar</b>: 
 Open Calendar-app -> click on "Calendars" at the bottom -> "Add Calendar" -> "Add Subscription Calendar" -> insert <b>your</b> URL
