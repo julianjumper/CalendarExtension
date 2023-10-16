@@ -82,6 +82,7 @@ chrome.runtime.onInstalled.addListener(async function (details) {
     // Genereate and save token
     const newUuid = generateUUID();
     chrome.storage.sync.set({ uuid: newUuid });
+    chrome.storage.sync.set({ show_passed: false });
     // call api to register new calendar
     createCalendar(newUuid);
   }

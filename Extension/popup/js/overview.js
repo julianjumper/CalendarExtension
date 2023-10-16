@@ -2,6 +2,8 @@ const eventList = document.getElementById("eventList");
 
 const domain = "https://calendarapi.jmjumper.de:5000/";
 let uuid;
+let show;
+const showPassedInput = document.getElementById("showPassedToggle");
 
 // api call to get events as json
 chrome.storage.sync.get(["uuid"], (result) => {
@@ -15,16 +17,22 @@ chrome.storage.sync.get(["uuid"], (result) => {
   })
     .then((response) => response.json())
     .then((data) => {
-      createScrollList(data.events);
+      chrome.storage.sync.get(["show_passed"], (result) => {
+        show = result.show_passed;
+        showPassedInput.checked = show;
+        createScrollList(data.events, show);
+      });
     })
     .catch((error) => {
       console.error("Fehler beim Senden der Daten:", error);
     });
 });
 
-const createScrollList = (eventsArray) => {
+const createScrollList = (eventsArray, show_passed) => {
+  let currentDate = new Date();
   for (i = 0; i < eventsArray.length; i++) {
     const event = eventsArray[i];
+
     let eventContainer = document.createElement("div");
     eventContainer.className = "eventContainer";
 
@@ -71,7 +79,9 @@ const createScrollList = (eventsArray) => {
 
     let eventThinTime = document.createElement("p");
     eventThinTime.className = "eventThin";
-    eventThinTime.innerText = event.allday ? "allday" : event.time + " - " + event.endTime;
+    eventThinTime.innerText = event.allday
+      ? "allday"
+      : event.time + " - " + event.endTime;
 
     eventTimeContainer.appendChild(eventBoldTime);
     eventTimeContainer.appendChild(eventThinTime);
@@ -94,7 +104,8 @@ const createScrollList = (eventsArray) => {
     eventLeftSide.appendChild(eventTitleContainer);
     eventLeftSide.appendChild(eventDateContainer);
     eventLeftSide.appendChild(eventTimeContainer);
-    if (event.location !== "") eventLeftSide.appendChild(eventLocationContainer);
+    if (event.location !== "")
+      eventLeftSide.appendChild(eventLocationContainer);
 
     // Add icons
     let eventRightSide = document.createElement("div");
@@ -115,6 +126,11 @@ const createScrollList = (eventsArray) => {
     eventContainer.appendChild(eventLeftSide);
     eventContainer.appendChild(eventRightSide);
 
+    let dateFromStering = new Date(`${event.date}T${event.time}`);
+    if (dateFromStering < currentDate && !show_passed) {
+      eventContainer.style.display = "none";
+    }
+
     eventList.appendChild(eventContainer);
   }
 
@@ -132,6 +148,12 @@ const addEventListeners = () => {
     item.addEventListener("click", eventListener, true);
   });
 };
+
+showPassedInput.addEventListener("change", (event) => {
+  show = event.target.checked;
+  chrome.storage.sync.set({ show_passed: show });
+  window.location.reload(); // not particularly beautiful, but it works
+});
 
 const deleteEvent = (eventIndex) => {
   fetch(domain + "deleteEvent", {

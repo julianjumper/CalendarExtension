@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
     "name": "CalendarExtension - add events while browsing",
-    "version": "1.1.0",
+    "version": "1.2.0",
     "description": "Adding events to your Apple/Google calendar easily from any website.",
     "author": "jmjumper",
     "permissions": ["storage", "activeTab", "scripting"],
