@@ -1,4 +1,4 @@
-const domain = "https://calendarapi.jmjumper.de:5000/";
+const domain = "https://calendarapi.jmjumper.de";
 
 function generateUUID() {
   var d = new Date().getTime();

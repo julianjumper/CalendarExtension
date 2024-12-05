@@ -1,4 +1,4 @@
-const url = "https://calendarapi.jmjumper.de:5000/";
+const url = "https://calendarapi.jmjumper.de";
 
 // get button and input field
 const uuidButton = document.getElementById("uuidButton");
