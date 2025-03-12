@@ -1,6 +1,6 @@
 const eventList = document.getElementById("eventList");
 
-const domain = "https://calendarapi.jmjumper.de";
+const domain = "https://calendarapi.jmjumper.de/";
 let uuid;
 let show;
 const showPassedInput = document.getElementById("showPassedToggle");
